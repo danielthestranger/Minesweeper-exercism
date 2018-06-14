@@ -35,28 +35,19 @@ public static class Minesweeper
 
         private void AnnotateBoard()
         {
-            char[,] annotatedBoard = new char[RowCount, ColCount];
-
+            StringBuilder rowBuilder = new StringBuilder(ColCount);
             for (int row = 0; row <= LastRowIndex; row++)
             {
                 for (int col = 0; col <= LastColIndex; col++)
                 {
-                    annotatedBoard[row, col] = GetFieldValue(row, col);
+                    rowBuilder.Append(GetFieldValue(row, col));
                 }
+                AnnotatedBoard[row] = rowBuilder.ToString();
+                rowBuilder.Clear();
             }
 
-
-            StringBuilder builder = new StringBuilder(ColCount);
-            for (int row = 0; row <= LastRowIndex; row++)
-            {
-                for (int col = 0; col <= LastColIndex; col++)
-                {
-                    builder.Append(annotatedBoard[row, col]);
-                }
-                AnnotatedBoard[row] = builder.ToString();
-                builder.Clear();
-            }
-
+            // Return the count of adjacent mines if any
+            // or the same char as on the input board
             char GetFieldValue(int row, int col)
             {
                 int myCount;
@@ -74,10 +65,10 @@ public static class Minesweeper
                 }
             }
 
+            // Count Minefield.Mine around the position defined by row, col
             int CountAdjacentMines(int row, int col)
             {
                 int totalCount = 0;
-
                 int peekedRow = 0;
                 int peekedCol = 0;
 
@@ -86,6 +77,8 @@ public static class Minesweeper
                     {
                         peekedRow = row + dRow;
                         peekedCol = col + dCol;
+
+                        //don't look off the board, or at the current position
                         if (peekedRow < 0
                             || peekedRow > LastRowIndex
                             || peekedCol < 0
