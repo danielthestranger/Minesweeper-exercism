@@ -20,10 +20,16 @@ public static class Minesweeper
         public Minefield(string[] input)
         {
             MinesOnlyBoard = input;
-            ColCount = MinesOnlyBoard[0].Length;
             RowCount = MinesOnlyBoard.Length;
 
-            AnnotateBoard();
+            AnnotatedBoard = new string[RowCount];
+            MinesOnlyBoard.CopyTo(AnnotatedBoard, 0);
+
+            if (RowCount > 0)
+            {
+                ColCount = MinesOnlyBoard[0].Length;
+                AnnotateBoard();
+            }
         }
 
 
@@ -39,7 +45,6 @@ public static class Minesweeper
                 }
             }
 
-            AnnotatedBoard = new string[RowCount];
 
             StringBuilder builder = new StringBuilder(ColCount);
             for (int row = 0; row <= LastRowIndex; row++)
@@ -100,11 +105,6 @@ public static class Minesweeper
 
     public static string[] Annotate(string[] input)
     {
-        if (input == null)
-            return null;
-        if (input.Length == 0)
-            return new string[0];
-
         Minefield field = new Minefield(input);
         return field.AnnotatedBoard;
     }
