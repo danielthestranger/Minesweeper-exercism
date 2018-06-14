@@ -37,16 +37,16 @@ public static class Minesweeper
 
         private void AnnotateBoard()
         {
-            AnnotatedBoard =
-                Enumerable.Range(0, RowCount)
-                .Select(
-                    row => string.Concat(
+            foreach (int row in Enumerable.Range(0, RowCount))
+            {
+                AnnotatedBoard[row] =
+                    string.Concat(
                         Enumerable.Range(0, ColCount)
                         .Select(
                             col => GetFieldAnnotation(row, col)
                         )
-                    )
-                ).ToArray();
+                    );
+            }
 
             // Return the count of adjacent mines if any,
             // or the same char as on the input board
