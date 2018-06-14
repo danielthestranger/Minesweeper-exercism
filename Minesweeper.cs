@@ -5,10 +5,13 @@ using System.Linq;
 
 public static class Minesweeper
 {
-    private class Minefield
+    private class MinesweeperBoard
     {
         public static readonly char Mine = '*';
         public static readonly char Empty = ' ';
+
+        public readonly string[] MinesOnlyBoard;
+        public string[] AnnotatedBoard { get; private set; }
 
         public int RowCount { get; private set; }
         public int ColCount { get; private set; }
@@ -16,16 +19,12 @@ public static class Minesweeper
         private int LastRowIndex { get { return RowCount - 1; } }
         private int LastColIndex { get { return ColCount - 1; } }
 
-        public string[] MinesOnlyBoard { get; private set; }
-        public string[] AnnotatedBoard { get; private set; }
-
-        public Minefield(string[] input)
+        public MinesweeperBoard(string[] minesOnlyBoard)
         {
-            MinesOnlyBoard = input;
+            MinesOnlyBoard = minesOnlyBoard;
             RowCount = MinesOnlyBoard.Length;
 
             AnnotatedBoard = new string[RowCount];
-
             if (RowCount > 0)
             {
                 ColCount = MinesOnlyBoard[0].Length;
@@ -56,13 +55,13 @@ public static class Minesweeper
             char GetFieldAnnotation(int row, int col)
             {
                 int myCount;
-                if (MinesOnlyBoard[row][col] == Minefield.Empty)
+                if (MinesOnlyBoard[row][col] == MinesweeperBoard.Empty)
                 {
                     myCount = CountAdjacentMines(row, col);
                     if (myCount == 0)
-                        return Minefield.Empty;
+                        return MinesweeperBoard.Empty;
                     else
-                        return Char.Parse(myCount.ToString());
+                        return Convert.ToChar(myCount.ToString());
                 }
                 else
                 {
@@ -74,8 +73,8 @@ public static class Minesweeper
             int CountAdjacentMines(int row, int col)
             {
                 int totalCount = 0;
-                int peekedRow = 0;
-                int peekedCol = 0;
+                int peekedRow;
+                int peekedCol;
 
                 for (int dRow = -1; dRow <= 1; dRow++)
                     for (int dCol = -1; dCol <= 1; dCol++)
@@ -91,7 +90,7 @@ public static class Minesweeper
                             || (dRow == 0 && dCol == 0)
                             )
                             continue;
-                        else if (MinesOnlyBoard[peekedRow][peekedCol] == Minefield.Mine)
+                        else if (MinesOnlyBoard[peekedRow][peekedCol] == MinesweeperBoard.Mine)
                             totalCount++;
                     }
 
@@ -103,7 +102,7 @@ public static class Minesweeper
 
     public static string[] Annotate(string[] input)
     {
-        Minefield field = new Minefield(input);
-        return field.AnnotatedBoard;
+        MinesweeperBoard board = new MinesweeperBoard(input);
+        return board.AnnotatedBoard;
     }
 }
