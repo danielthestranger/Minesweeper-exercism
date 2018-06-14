@@ -25,12 +25,15 @@ public static class Minesweeper
             RowCount = MinesOnlyBoard.Length;
 
             AnnotatedBoard = new string[RowCount];
-            MinesOnlyBoard.CopyTo(AnnotatedBoard, 0);
 
             if (RowCount > 0)
             {
                 ColCount = MinesOnlyBoard[0].Length;
                 AnnotateBoard();
+            }
+            else
+            {
+                MinesOnlyBoard.CopyTo(AnnotatedBoard, 0);
             }
         }
 
@@ -40,7 +43,7 @@ public static class Minesweeper
             foreach (int row in Enumerable.Range(0, RowCount))
             {
                 AnnotatedBoard[row] =
-                    string.Concat(
+                    String.Concat(
                         Enumerable.Range(0, ColCount)
                         .Select(
                             col => GetFieldAnnotation(row, col)
