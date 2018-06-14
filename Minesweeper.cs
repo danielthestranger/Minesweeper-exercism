@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text;
+using System.Collections.Generic;
+using System.Linq;
 
 public static class Minesweeper
 {
@@ -11,8 +13,8 @@ public static class Minesweeper
         public int RowCount { get; private set; }
         public int ColCount { get; private set; }
 
-        public int LastRowIndex { get { return RowCount - 1; } }
-        public int LastColIndex { get { return ColCount - 1; } }
+        private int LastRowIndex { get { return RowCount - 1; } }
+        private int LastColIndex { get { return ColCount - 1; } }
 
         public string[] MinesOnlyBoard { get; private set; }
         public string[] AnnotatedBoard { get; private set; }
@@ -36,19 +38,19 @@ public static class Minesweeper
         private void AnnotateBoard()
         {
             StringBuilder rowBuilder = new StringBuilder(ColCount);
-            for (int row = 0; row <= LastRowIndex; row++)
+            foreach (int row in Enumerable.Range(0, RowCount))
             {
-                for (int col = 0; col <= LastColIndex; col++)
+                foreach (int col in Enumerable.Range(0, ColCount))
                 {
-                    rowBuilder.Append(GetFieldValue(row, col));
+                    rowBuilder.Append(GetFieldAnnotation(row, col));
                 }
                 AnnotatedBoard[row] = rowBuilder.ToString();
                 rowBuilder.Clear();
             }
 
-            // Return the count of adjacent mines if any
+            // Return the count of adjacent mines if any,
             // or the same char as on the input board
-            char GetFieldValue(int row, int col)
+            char GetFieldAnnotation(int row, int col)
             {
                 int myCount;
                 if (MinesOnlyBoard[row][col] == Minefield.Empty)
